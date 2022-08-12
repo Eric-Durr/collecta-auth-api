@@ -15,8 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 const db = require("./models");
 const Role = db.role;
 db.sequelize.sync().then(() => {
-  console.log('Drop and Resync Db');
-  initial();
+  console.log('Connected to ECOSISTEMAS_ERIC database');
 });
 
 function initial() {
@@ -37,8 +36,8 @@ function initial() {
 }
 
 // simple route
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to bezkoder application." });
+app.get("/", (_req, res) => {
+  res.json({ message: "Welcome to Collecta API, you shouldn't be accessing here" });
 });
 // Routes initialization
 require('./routes/auth.routes')(app);

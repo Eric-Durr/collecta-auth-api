@@ -43,35 +43,34 @@ exports.signin = (req, res) => {
   })
     .then(user => {
       if (!user) {
-        return res.status(404).send({ message: "User Not found." });
+        console.log('no user');
+        return res.status(400).send({ message: "Wrong user or password." });
       }
       const passwordIsValid = bcrypt.compareSync(
         req.body.password,
         user.password
       );
       if (!passwordIsValid) {
-        return res.status(401).send({
+        return res.status(400).send({
           accessToken: null,
-          message: "Invalid Password!"
+          message: "Wrong user or password."
         });
       }
       const token = jwt.sign({ id: user.id }, config.secret, {
         expiresIn: 86400 // 24 hours
       });
-      const authorities = [];
-      user.getRoles().then(roles => {
-        for (let role in roles) {
-          authorities.push("ROLE_" + role.name.toUpperCase());
-        }
-        res.status(200).send({
-          id: user.id,
-          username: user.username,
-          roles: authorities,
-          accessToken: token
-        });
+
+      res.status(200).send({
+        id: user.id,
+        username: user.username,
+        accessToken: token
       });
     })
     .catch(err => {
       res.status(500).send({ message: err.message });
     });
+};
+
+exports.logout = (_req, res) => {
+  res.status(200).send({auth: false, token: null});
 };
