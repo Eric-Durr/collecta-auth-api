@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // DB Init
-const db = require("./models");
+const db = require("./src/models");
 const Role = db.role;
 db.sequelize.sync().then(() => {
   console.log('Connected to ECOSISTEMAS_ERIC database');
@@ -40,8 +40,8 @@ app.get("/", (_req, res) => {
   res.json({ message: "Welcome to Collecta API, you shouldn't be accessing here" });
 });
 // Routes initialization
-require('./routes/auth.routes')(app);
-require('./routes/user.routes')(app);
+require('./src/routes/auth.routes')(app);
+require('./src/routes/user.routes')(app);
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
