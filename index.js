@@ -2,9 +2,15 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 const corsOptions = {
   origin: "http://localhost:8081"
 };
+
 app.use(cors(corsOptions));
 // parse requests of content-type - application/json
 app.use(express.json());
