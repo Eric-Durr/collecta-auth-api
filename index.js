@@ -24,23 +24,6 @@ db.sequelize.sync().then(() => {
   console.log('Connected to ECOSISTEMAS_ERIC database');
 });
 
-function initial() {
-  Role.create({
-    id: 1,
-    name: "user"
-  });
- 
-  Role.create({
-    id: 2,
-    name: "moderator"
-  });
- 
-  Role.create({
-    id: 3,
-    name: "admin"
-  });
-}
-
 // simple route
 app.get("/", (_req, res) => {
   res.json({ message: "Welcome to Collecta API, you shouldn't be accessing here" });
@@ -48,6 +31,7 @@ app.get("/", (_req, res) => {
 // Routes initialization
 require('./api/routes/auth.routes')(app);
 require('./api/routes/user.routes')(app);
+require('./api/routes/area.routes')(app);
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
