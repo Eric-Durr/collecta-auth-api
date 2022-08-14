@@ -12,11 +12,13 @@ exports.allInZone = (req, res) => {
   let longitudePlusOffset = req.body.lon + (OFFSET / (R * Math.cos(Math.PI * req.body.lat / 180)) * 180 / Math.PI) ;
   let longitudeMinusOffset = req.body.lon - (OFFSET / (R * Math.cos(Math.PI * req.body.lat / 180)) * 180 / Math.PI);
 
+  console.log(req.query.zone)
+
   Area.findAll(
     {
       where: {
           zona_UTM: {
-            [Op.like]: '%' + req.body.zone + '%'
+            [Op.like]: '%' + req.query.zone + '%'
           }
       }
     }
