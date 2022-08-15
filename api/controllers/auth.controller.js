@@ -9,7 +9,8 @@ exports.signup = (req, res) => {
   // Save User to Database
   User.create({
     username: req.body.username,
-    password: bcrypt.hashSync(req.body.password, 8)
+    password: bcrypt.hashSync(req.body.password, 8),
+    team_id: req.body.team_id
   })
     .then(user => {
       if (req.body.roles) {
@@ -25,6 +26,7 @@ exports.signup = (req, res) => {
           });
         });
       } else {
+        
         // user role = 1
         user.setRoles([1]).then(() => {
           res.send({ message: "User was registered successfully!" });

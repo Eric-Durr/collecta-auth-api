@@ -18,9 +18,14 @@ const sequelize = new Sequelize(
 const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
+// Custom auth tables
 db.user = require("./user.model.js")(sequelize, Sequelize);
 db.role = require("./role.model.js")(sequelize, Sequelize);
+// Existing tables
 db.area_muestreo = require("./area.model.js")(sequelize, Sequelize);
+db.equipo_proyecto = require("./team.model.js")(sequelize, Sequelize);
+
+// DB  config
 db.role.belongsToMany(db.user, {
   through: "user_roles",
   foreignKey: "roleId",

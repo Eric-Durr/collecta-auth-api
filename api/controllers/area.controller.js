@@ -7,11 +7,6 @@ const R = 6378137; // Earth Radius
 
 exports.allInZone = (req, res) => {
   
-  let latitudePlusOffset = req.body.lat + (OFFSET/R) * 180 / Math.PI;
-  let latitudeMinusOffset = req.body.lat - (OFFSET/R) * 180 / Math.PI;
-  let longitudePlusOffset = req.body.lon + (OFFSET / (R * Math.cos(Math.PI * req.body.lat / 180)) * 180 / Math.PI) ;
-  let longitudeMinusOffset = req.body.lon - (OFFSET / (R * Math.cos(Math.PI * req.body.lat / 180)) * 180 / Math.PI);
-
   console.log(req.query.zone)
 
   Area.findAll(
