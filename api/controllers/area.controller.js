@@ -11,7 +11,7 @@ exports.allInZone = (req, res) => {
     {
       where: {
           zona_UTM: {
-            [Op.like]: '%' + req.query.zone + '%'
+            [Op.like]: `%${req.query.zone} %`
           }
       }
     }
@@ -65,7 +65,7 @@ exports.addArea = (req, res) => {
         zona_UTM: req.body.uTMZone,
         "sistema geográfico": req.body.geographicSystem,
       }).then(newArea => {
-        res.status(201).send({message: `Area ${newArea.id_area} added succesfully`, area: newArea});
+        res.status(201).send({message: `Area added succesfully`, area: newArea});
       }
       ).catch(err => {
         res.status(500).send({ message: err.message });
