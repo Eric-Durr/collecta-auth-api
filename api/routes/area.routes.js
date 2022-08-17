@@ -7,9 +7,8 @@ module.exports = function(app) {
     );
     next();
   });
-
-  app.get("/api/areas/:id", controller.findById);
   app.get("/api/areas/in-zone", controller.allInZone);
+  app.get("/api/areas/:id", controller.findById);
   app.post("/api/areas/", controller.addArea);
-  app.delete("/api/areas/:id", controller.deletaById);
+  app.delete("/api/areas/:id", controller.deleteById);
 };

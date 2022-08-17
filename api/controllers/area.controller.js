@@ -6,12 +6,12 @@ const OFFSET = 4000000; // offset in meters for the area 4.000 Km in each direct
 const R = 6378137; // Earth Radius
 
 exports.allInZone = (req, res) => {
-  
+  console.log(req.query.zone)
   Area.findAll(
     {
       where: {
           zona_UTM: {
-            [Op.like]: `%${req.query.zone} %`
+            [Op.like]: `%${req.query.zone}%`
           }
       }
     }
@@ -76,7 +76,7 @@ exports.addArea = (req, res) => {
   });
 };
 
-exports.deletaById = (req, res) => {
+exports.deleteById = (req, res) => {
   Area.findOne({
      where: { id_area: Number.parseInt(req.params.id) }
    })
