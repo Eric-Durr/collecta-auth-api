@@ -57,10 +57,10 @@ exports.addArea = (req, res) => {
       return res.status(400).send({ message: `Area with ID ${area.id_area} already exists` });
     } else {
       Area.create({
-        id_area: req.body.id_area,
+        id_area: Number.parseInt(req.body.id_area),
         X: req.body.longitude,
         Y: req.body.latitude,
-        proyecto: req.body.project_id,
+        proyecto: Number.parseInt(req.body.project_id),
         observaciones: req.body.annotations,
         zona_UTM: req.body.uTMZone,
         "sistema geográfico": req.body.geographicSystem,
