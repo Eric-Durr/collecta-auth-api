@@ -1,5 +1,8 @@
 const db = require("../models");
 const Area = db.area_muestreo;
+const sequelize = db.sequelize;
+const AreaMetodo = db.area_muestreo_metodo;
+const Transecto = db.transecto;
 const Op = db.Sequelize.Op;
 
 const OFFSET = 4000000; // offset in meters for the area 4.000 Km in each direction
@@ -90,3 +93,16 @@ exports.deleteById = (req, res) => {
      res.status(500).send({ message: err.message });
    });
  };
+
+ exports.allAreaTransectMeasures=(req, res) => {
+  sequelize.query(
+    `SELECT punto,especie,contactos,fecha FROM area_muestreo_metodo JOIN muestreo_datos_vegetacion_mapatrans ON area_muestreo_metodo.id_combinado = muestreo_datos_vegetacion_mapatrans.id_fecha_metodo WHERE area_muestreo_metodo.id_area=${req.params.id} AND area_muestreo_metodo.metodo=835`
+  ).then(measures => {
+    if (!measures) {
+      return res.status(400).send({ message: `Area with ID ${req.params.id} has no transect measures` });
+    }
+    return res.status(200).send({measures: measures[0]});
+  }).catch(err => {
+     res.status(500).send({ message: err.message });
+   });
+ }

@@ -11,4 +11,5 @@ module.exports = function(app) {
   app.get("/api/areas/:id", controller.findById);
   app.post("/api/areas/", controller.addArea);
   app.delete("/api/areas/:id", controller.deleteById);
+  app.get("/api/areas/:id/transect-measures", controller.allAreaTransectMeasures);
 };
