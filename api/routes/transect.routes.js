@@ -8,5 +8,9 @@ module.exports = function(app) {
     next();
   });
   app.get("/api/transect/", controller.getAll);
-  app.get("/api/transect/:date", controller.findByDateId);
+  app.post("/api/transect/", controller.addTransect);
+  app.put("/api/transect/", controller.addTransect);
+  app.get("/api/transect/areas", controller.findAllAreas);
+  app.get("/api/transect/areas/:id/teams", controller.findAllTransectAreaTeams);
+  app.get("/api/transect/areas/:id", controller.findByArea);
 };

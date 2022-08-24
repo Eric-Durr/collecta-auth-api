@@ -24,4 +24,8 @@ module.exports = function(app) {
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.adminBoard
   );
+  app.delete(
+    "/api/user/:id",
+    controller.deleteById
+  );
 };

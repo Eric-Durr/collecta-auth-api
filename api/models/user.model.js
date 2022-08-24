@@ -6,8 +6,5 @@ module.exports = (sequelize, Sequelize) => {
     password: {
       type: Sequelize.STRING
     },
-    team_id: {
-      type: Sequelize.INTEGER
-    }
   });
 };

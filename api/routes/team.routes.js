@@ -9,4 +9,5 @@ module.exports = function(app) {
   });
   app.get("/api/teams/", controller.allTeams);
   app.get("/api/teams/:id", controller.selectById);
+  app.get("/api/teams/:id/members", controller.selectMembersById);
 };

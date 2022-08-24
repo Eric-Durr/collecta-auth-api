@@ -1,3 +1,4 @@
+const {sequelize}=require("../models");
 const db = require("../models");
 const Team = db.equipo_proyecto;
 const Op = db.Sequelize.Op;
@@ -17,18 +18,44 @@ exports.allTeams = (_req, res) => {
       res.status(500).send({ message: err.message });
     });
 };
-
-// Select team by ID
+// Select project by team ID
 exports.selectById = (req, res) => {
-  Team.findOne({
-      where: { id: req.params.id }
-    })
-    .then(team => {
-      if (!team) {
-        console.log(`no team for id ${req.query.id}`);
+  sequelize.query(
+  `SELECT id_proyecto FROM equipo_proyecto `+
+  `JOIN inventario_equipo `+
+  `ON equipo_proyecto.id = inventario_equipo.id `+
+  `JOIN team_member `+
+  `ON team_member.id_member = inventario_equipo.id `+
+  `WHERE team_member.id_team = ${req.params.id}`)
+    .then(project => {
+      if (!project) {
+        console.log(`no project for team id ${req.query.id}`);
         return res.status(400).send({ message: "No teams found for the given ID" });
       }
-      res.status(200).send(team);
+
+      res.status(200).send(project[0][0]);
+    })
+    .catch(err => {
+      res.status(500).send({ message: err.message });
+    });
+};
+
+// Select project by team ID
+exports.selectMembersById = (req, res) => {
+  sequelize.query(
+  `SELECT nombre, institucion, inventario_equipo.rol  FROM equipo_proyecto `+
+  `JOIN inventario_equipo `+
+  `ON equipo_proyecto.id = inventario_equipo.id `+
+  `JOIN team_member `+
+  `ON team_member.id_member = inventario_equipo.id `+
+  `WHERE team_member.id_team = ${req.params.id}`)
+    .then(project => {
+      if (!project) {
+        console.log(`no project for team id ${req.query.id}`);
+        return res.status(400).send({ message: "No teams found for the given ID" });
+      }
+
+      res.status(200).send({team_info: project[0]});
     })
     .catch(err => {
       res.status(500).send({ message: err.message });

@@ -1,40 +1,45 @@
 const db = require("../models");
 const config = require("../config/auth.config");
 const User = db.user;
-const Role = db.role;
-const Op = db.Sequelize.Op;
+const Member = db.user_member;
+const Project = db.equipo_proyecto;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 exports.signup = (req, res) => {
   // Save User to Database
+
   User.create({
     username: req.body.username,
     password: bcrypt.hashSync(req.body.password, 8),
-    team_id: req.body.team_id
   })
     .then(user => {
-      if (req.body.roles) {
-        Role.findAll({
-          where: {
-            name: {
-              [Op.or]: req.body.roles
-            }
-          }
-        }).then(roles => {
-          user.setRoles(roles).then(() => {
-            res.send({ message: "User was registered successfully!" });
-          });
-        });
+      let success = true
+      req.body.members.forEach(member => {
+          Member.create({
+            id_team: user.id,
+            id_member: member
+          }).catch((_err) => {
+              success = false;
+          })
+      });
+
+      
+
+      if (success) {
+        return res.status(200).send({
+          message: 'Team built correctly',
+          data: {
+            username: user.username,
+            team_id: user.id,
+          },
+      });
       } else {
-        
-        // user role = 1
-        user.setRoles([1]).then(() => {
-          res.send({ message: "User was registered successfully!" });
-        });
+        return res.status(500).send({message: 'Failed building team'});
       }
+    
     })
     .catch(err => {
-      res.status(500).send({ message: err.message });
+      return res.status(500).send({ message: err.message });
     });
 };
 exports.signin = (req, res) => {
@@ -58,16 +63,35 @@ exports.signin = (req, res) => {
           message: "Wrong user or password."
         });
       }
-      const token = jwt.sign({ id: user.id }, config.secret, {
-        expiresIn: 86400 // 24 hours
-      });
+      let success = true
+      let projectId;
+      Project.findOne({
+        where: {
+          id: req.body.members[0]
+        }
+      }).then((project) => {
+        projectId = project.id_proyecto
+      }).catch( () => {
+        success = false;
+      })
+      if (success) {
 
-      res.status(200).send({
-        id: user.id,
-        username: user.username,
-        team_id: user.team_id,
-        accessToken: token
-      });
+        const token = jwt.sign({ id: user.id }, config.secret, {
+          expiresIn: 86400 // 24 hours
+        });
+  
+        res.status(200).send({
+          id: user.id,
+          username: user.username,
+          project_id: projectId,
+          accessToken: token
+        });
+      } else {
+        return res.status(400).send({
+          accessToken: null,
+          message: "Project not found."
+        });
+      }
     })
     .catch(err => {
       res.status(500).send({ message: err.message });
