@@ -63,18 +63,6 @@ exports.signin = (req, res) => {
           message: "Wrong user or password."
         });
       }
-      let success = true
-      let projectId;
-      Project.findOne({
-        where: {
-          id: req.body.members[0]
-        }
-      }).then((project) => {
-        projectId = project.id_proyecto
-      }).catch( () => {
-        success = false;
-      })
-      if (success) {
 
         const token = jwt.sign({ id: user.id }, config.secret, {
           expiresIn: 86400 // 24 hours
@@ -86,12 +74,6 @@ exports.signin = (req, res) => {
           project_id: projectId,
           accessToken: token
         });
-      } else {
-        return res.status(400).send({
-          accessToken: null,
-          message: "Project not found."
-        });
-      }
     })
     .catch(err => {
       res.status(500).send({ message: err.message });
